@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import MainView from '../views/MainView.vue'
+import MainView from '@/views/MainView.vue'
 
 const routes = [
   {
-    path: '/',
+    path: '/', // TODO: Replace with /user_list
     name: 'MainView',
     component: MainView,
   },

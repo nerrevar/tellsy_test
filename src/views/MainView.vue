@@ -3,13 +3,13 @@
     :menuItems="menuItems"
     :support="true"
   />
-  <div class="title">Список экспертов по оценке руководителей</div>
+  <div class="title">Список экспертов по оценке и руководителей</div>
   <FilterList
-    :items="expertFilters"
+    :items="userFilters"
   />
-  <ExpertTable
+  <UserTable
     :headers="tableHeaders"
-    :records="expertRecords"
+    :records="userRecords"
   />
   <PageNavigation
     :currentPage="currentPage"
@@ -20,32 +20,80 @@
   >
     Добавить пользователя
   </div>
-  <ModalAddExpert
+  <ModalAddUser
     v-if="isModalAddVisible"
   />
 </template>
 
 <script>
-import { HeaderNavigation } from '@/components/HeaderNavigation.vue'
-import { FilterList } from '@/components/FilterList.vue'
-import { ExpertTable } from '@/components/ExpertTable.vue'
-import { PageNavigation } from '@/components/PageNavigation.vue'
-import { ModalAddExpert } from '@/components/ModalAddExpert.vue'
+import { ref } from 'vue'
+
+import HeaderNavigation from '@/components/HeaderNavigation/HeaderNavigation.vue'
+import FilterList from '@/components/FilterList/FilterList.vue'
+import UserTable from '@/components/UserTable.vue'
+import PageNavigation from '@/components/PageNavigation.vue'
+import ModalAddUser from '@/components/ModalAddUser.vue'
 
 export default {
   name: 'MainView',
   components: {
     HeaderNavigation,
     FilterList,
-    ExpertTable,
+    UserTable,
     PageNavigation,
-    ModalAddExpert
+    ModalAddUser,
   },
   setup () {
+    const menuItems = [
+      {
+        path: '/about',
+        text: 'О платформе',
+      },
+      {
+        path: '/user_upload',
+        text: 'Загрузка пользователей',
+      },
+      {
+        path: '/', // TODO: Replace with /user_list
+        text: 'Список пользователей',
+      }
+    ]
+
+    const userFilters = [
+      {
+        name: 'Test',
+        values: [
+          'test1',
+          'test2'
+        ],
+      }
+    ]
+
+    const tableHeaders = [
+      '',
+      'id',
+      'testHeader'
+    ]
+
+    const userRecords = [
+      [
+        'checked',
+        '1',
+        'testCell'
+      ]
+    ]
+
+    const currentPage = 1
+
     const isModalAddVisible = ref(false)
-    const setModalAddVisible = (value) => isModalAddVisible.value = value
+    const setModalAddVisible = value => isModalAddVisible.value = value
 
     return {
+      menuItems,
+      userFilters,
+      tableHeaders,
+      userRecords,
+      currentPage,
       isModalAddVisible,
       setModalAddVisible,
     }
