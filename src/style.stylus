@@ -1,0 +1,21 @@
+*
+  margin 0
+  padding 0
+  box-sizing border-box
+  text-align center
+
+#app
+  margin auto
+  display flex
+  flex-flow column nowrap
+
+  @media screen and (min-width: 900px)
+    max-width 900px
+
+.button
+  padding 0.5em 1em
+  background-color #459
+  color white
+  border-radius 3px
+  line-height 1.2em
+  max-height 2.2em

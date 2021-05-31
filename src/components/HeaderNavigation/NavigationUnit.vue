@@ -18,3 +18,10 @@ export default {
   },
 }
 </script>
+
+<style lang="stylus" scoped>
+.navigation-unit
+  padding 1em
+  text-decoration none
+  color black
+</style>
