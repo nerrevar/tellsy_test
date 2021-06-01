@@ -29,11 +29,29 @@
         />
       </div>
       <div
-        class="table__cell"
+        :class="[
+          'table__cell',
+          {
+            'table__cell_email': indexCell === 'email',
+            'table__cell_password': indexCell === 'password' && !isPasswordVisible,
+          }
+        ]"
         v-for="(cellValue, indexCell) in record"
         :key="`cell-${ indexCell }`"
       >
-        {{ cellValue }}
+        <span
+          v-if="indexCell !== 'password' || isPasswordVisible"
+        >
+          {{ cellValue }}
+        </span>
+        <span v-else>*******</span>
+        <img
+          v-if="indexCell === 'password'"
+          src="@/assets/eye.svg"
+          alt=""
+          style="vertical-align: bottom; margin-left: 3px;"
+          @click="setPasswordVisible(!isPasswordVisible)"
+        />
       </div>
     </div>
   </div>
@@ -69,9 +87,14 @@ export default {
       }
     }
 
+    const isPasswordVisible = ref(false)
+    const setPasswordVisible = val => isPasswordVisible.value = val
+
     return {
       selectedRows,
       changeSelectState,
+      isPasswordVisible,
+      setPasswordVisible,
     }
   },
 }
@@ -80,7 +103,7 @@ export default {
 <style lang="stylus" scoped>
 .table
   display table
-  margin-left -30px
+  margin-left -40px
 
   padding 1em 0
 
@@ -89,12 +112,12 @@ export default {
 
   &__header
     display table-cell
-    padding: 0.2em
+    padding: 1em
     border 1px solid lightgrey
     color #459
 
     &:first-child
-      width 30px
+      width 40px
       border none
 
   &__body
@@ -111,10 +134,13 @@ export default {
 
   &__cell
     display table-cell
-    padding 0.2em
+    padding 1em
     border 1px solid lightgrey
 
     &:first-child
       max-width 30px
       border none
+
+    &_email
+      color: #459
 </style>

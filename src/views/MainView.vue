@@ -6,6 +6,7 @@
   <div class="title">Список экспертов по оценке и руководителей</div>
   <FilterList
     :items="userFilters"
+    @applyFilters="applyFilters($event)"
   />
   <UserTable
     :headers="tableHeaders"
@@ -32,7 +33,12 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import {
+  ref,
+  computed,
+  onBeforeMount,
+} from 'vue'
+import { useStore } from 'vuex'
 
 import HeaderNavigation from '@/components/HeaderNavigation/HeaderNavigation.vue'
 import FilterList from '@/components/FilterList/FilterList.vue'
@@ -50,6 +56,8 @@ export default {
     ModalAddUser,
   },
   setup () {
+    const store = useStore()
+
     const menuItems = [
       {
         path: '/about',
@@ -65,32 +73,17 @@ export default {
       }
     ]
 
-    const userFilters = [
-      {
-        name: 'Test',
-        displayName: 'ID',
-        placeholder: 'Введите ID',
-        values: [
-          'test1',
-          'test2'
-        ],
-      }
-    ]
+    const userFilters = ref([])
 
-    const tableHeaders = [
-      'id',
-      'testHeader'
-    ]
-
-    const userRecords = [
-      [
-        '1',
-        'testCell'
-      ]
-    ]
+    const tableHeaders = ref([])
 
     const currentPage = ref(1)
-    const lastPage = ref(1)
+    const lastPage = computed(() => Math.ceil(store.state.users.length / 20))
+
+    const userRecords = computed(() => store.state.users.slice(
+      (currentPage.value - 1) * 20,
+      currentPage.value * 20
+    ))
 
     const changePage = payload => {
       if (currentPage.value !== payload.page)
@@ -99,6 +92,61 @@ export default {
 
     const isModalAddVisible = ref(false)
     const setModalAddVisible = value => isModalAddVisible.value = value
+
+    const getUsers = async () => {
+      let users = []
+      await fetch('/db/users.json')
+        .then(r => r.json())
+        .then(r => users = r)
+      return users
+    }
+
+    const getFilters = async () => {
+      let filters = []
+      await fetch('/db/filters.json')
+        .then(r => r.json())
+        .then(r => filters = r)
+      return filters
+    }
+
+    const getHeaders = async () => {
+      let headers = []
+      await fetch('/db/schema.json')
+        .then(r => r.json())
+        .then(r => headers = r)
+      return headers
+    }
+
+    onBeforeMount(async () => {
+      const users = await getUsers()
+      const filters = await getFilters()
+      const headers = await getHeaders()
+
+      for (const filterName in filters)
+        userFilters.value.push({
+          name: filterName,
+          displayName: filters[filterName].displayName,
+          placeholder: filters[filterName].placeholder,
+          values: [...new Set(users.slice(0, 50).map(u => u[filterName]))]
+        })
+
+      Object.keys(...users.slice(0, 1)).forEach(k => tableHeaders.value.push(headers[k]))
+
+      store.commit('setUsers', { users: users })
+    })
+
+    const applyFilters = async filters => {
+      const users = await getUsers()
+
+      store.commit('setUsers', {
+        users: users.filter(user => {
+          for (const filterName in filters)
+            if (user[filterName] !== filters[filterName])
+              return false
+          return true
+        }),
+      })
+    }
 
     return {
       menuItems,
@@ -110,6 +158,7 @@ export default {
       changePage,
       isModalAddVisible,
       setModalAddVisible,
+      applyFilters,
     }
   },
 }

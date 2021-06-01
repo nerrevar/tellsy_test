@@ -32,7 +32,12 @@ export default {
   },
   setup () {
     const filterValues = ref({})
-    const updateFilterValue = filterObj => Object.assign(filterValues.value, filterObj)
+    const updateFilterValue = filterObj => {
+      if (Object.values(filterObj)[0])
+        Object.assign(filterValues.value, filterObj)
+      else
+        delete filterValues.value[Object.keys(filterObj)[0]]
+    }
 
     return {
       filterValues,
@@ -46,6 +51,7 @@ export default {
 .filter-list
   display flex
   flex-flow row nowrap
+  justify-content space-between
 
   &__button
     align-self flex-end

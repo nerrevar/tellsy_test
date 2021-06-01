@@ -47,6 +47,10 @@ shadow()
   align-items flex-start
   padding-right 2em
 
+  &__label
+    color #459
+    font-weight 600
+
 .input-group
   &__input
     shadow()

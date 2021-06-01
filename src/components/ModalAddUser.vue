@@ -4,7 +4,10 @@
       class="overlay"
       @click="$emit('closeModal')"
     >
-      <div class="modal">
+      <div
+        class="modal"
+        @click.stop="() => null"
+      >
         <div
           class="modal__close"
           @click="$emit('closeModal')"
@@ -47,7 +50,7 @@ export default {
           type: 'date',
           name: 'date',
           placeholder: '01.01.1970',
-          validatioinFunction: str => str.replace(/[\d]{4}-[\d]{2}-[\d]{2}/i, '') === ''
+          validatioinFunction: str => str.replace(/[\d]{4}-[\d]{2}-[\d]{2}/i, '') === '',
         },
         icon: {
           type: 'img',
@@ -75,7 +78,7 @@ export default {
           placeholder: 'Введите должность',
           datalist: [
             'Директор',
-            'Продавец',
+            'Продавец'
           ],
           validatioinFunction: str => str.replace(/[а-я ]+/i, '') === '',
         },

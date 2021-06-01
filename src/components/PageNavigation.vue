@@ -44,7 +44,7 @@
           'page-navigation__last-page_active': currentPage === lastPage,
         }
       ]"
-      v-if="lastPage !== 1"
+      v-if="lastPage > 1"
       @click="$emit('changePage', { page: lastPage })"
     >
       {{ lastPage }}

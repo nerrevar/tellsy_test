@@ -1,0 +1,18 @@
+{
+  "id": {
+    "displayName": "ID",
+    "placeholder": "Введите ID"
+  },
+  "name": {
+    "displayName": "ФИО",
+    "placeholder": "Введите ФИО участника"
+  },
+  "position": {
+    "displayName": "Должность",
+    "placeholder": "Введите должность участника"
+  },
+  "email": {
+    "displayName": "Почта (логин)",
+    "placeholder": "Введите email участника"
+  }
+}

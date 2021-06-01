@@ -120,6 +120,8 @@ shadow()
       padding: 0.2em 0.5em
       width 210px
       text-align left
+      font-size 14px
+      height @font-size * 2
 
       &_error
         background-color #f777
